@@ -1,4 +1,29 @@
 defmodule Arbor.Tree do
+  @moduledoc """
+
+  Using `Arbor.Tree` will add common tree traversal functions to your Ecto model.
+
+  ## Examples
+      defmodule Comment do
+        use Ecto.Schema
+        use Arbor.Tree,
+          table_name: "comments",
+          tree_name: "comments_tree",
+          primary_key: :id,
+          primary_key_type: :id,
+          foreign_key: :parent_id,
+          foreign_key_type: :id
+          orphan_strategy: :nothing
+
+        schema "comments" do
+          field :body, :string
+          belongs_to :parent, Arbor.Comment
+
+          timestamps
+        end
+      end
+  """
+
   defmacro __using__(opts) do
     quote do
       import unquote(__MODULE__)
@@ -37,14 +62,19 @@ defmodule Arbor.Tree do
     quote do
       import Ecto.Query
 
+      def roots do
+        from t in unquote(definition),
+          where: fragment(unquote("#{opts[:foreign_key]} IS NULL"))
+      end
+
       def parent(struct) do
         from t in unquote(definition),
           where: fragment(unquote("#{opts[:primary_key]} = ?"), type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type])))
       end
 
-      def roots do
+      def children(struct) do
         from t in unquote(definition),
-          where: fragment(unquote("#{opts[:foreign_key]} IS NULL"))
+          where: fragment(unquote("#{opts[:foreign_key]} = ?"), type(^struct.id, unquote(opts[:foreign_key_type])))
       end
 
       def siblings(struct) do
@@ -54,9 +84,21 @@ defmodule Arbor.Tree do
                           type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type])))
       end
 
-      def children(struct) do
+      def ancestors(struct) do
         from t in unquote(definition),
-          where: fragment(unquote("#{opts[:foreign_key]} = ?"), type(^struct.id, unquote(opts[:foreign_key_type])))
+          join: g in fragment(unquote("""
+          WITH RECURSIVE #{opts[:tree_name]} AS (
+            SELECT #{opts[:primary_key]}, ARRAY[]::#{opts[:array_type]}[] AS ancestors
+            FROM #{opts[:table_name]}
+            WHERE #{opts[:foreign_key]} IS NULL
+          UNION ALL
+            SELECT #{opts[:table_name]}.#{opts[:primary_key]}, #{opts[:tree_name]}.ancestors || #{opts[:table_name]}.#{opts[:foreign_key]}
+            FROM #{opts[:table_name]}, #{opts[:tree_name]}
+            WHERE #{opts[:table_name]}.#{opts[:foreign_key]} = #{opts[:tree_name]}.#{opts[:primary_key]}
+          )
+          SELECT unnest(ancestors) AS ancestor_id FROM #{opts[:tree_name]} WHERE #{opts[:primary_key]} = ?
+          """), type(^struct.id, unquote(opts[:primary_key_type]))),
+          on: t.id == g.ancestor_id
       end
 
       def descendants(struct) do

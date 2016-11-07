@@ -1,6 +1,8 @@
 # Arbor
 
 [![Build Status](https://travis-ci.org/coryodaniel/arbor.svg)](https://travis-ci.org/coryodaniel/arbor)
+[![Hex Version](http://img.shields.io/hexpm/v/arbor.svg?style=flat)](https://hex.pm/packages/arbor)
+[![Hex docs](http://img.shields.io/badge/hex.pm-docs-green.svg?style=flat)](https://hexdocs.pm/arbor)
 
 Ecto nested-set and tree traversal using CTEs. Arbor uses a `parent_id` field
 and CTEs to create simple deep nested SQL hierarchies.
@@ -67,9 +69,21 @@ siblings = my_comment
            |> Repo.all
 ```
 
+### ancestors
+
+Returns the entire ancestor (parent's parent's parent, etc) path to the record, but not including the record.
+
+```elixir
+descendants = my_comment
+              |> Comment.ancestors
+              |> Comment.order_by_inserted_at
+              |> Repo.all              
+```
+
+
 ### Descendants
 
-Returns the entire descendant tree of a record.
+Returns the entire descendant tree of a record, but not including the record.
 
 ```elixir
 descendants = my_comment
@@ -128,14 +142,14 @@ mix test
   * [x] siblings
   * [x] roots
   * [x] parent
-  * [ ] ancestors
+  * [x] ancestors
   * [ ] path (ancestors + target)
   * [ ] subtree (target + children)
   * [ ] delete (nilify, destroy, adopt)
   * [ ] move
   * [ ] leafs  
-* [ ] Docs
-* [ ] depth selector on descendants and subtree, include depth or array size in CTE?
+* [ ] Document macros...
+* [ ] depth selector on descendants and subtree... Add `AND cardinality(tree.ancestors) < XXX` to recursive section
 * [ ] arbor.gen.migration SCHEMA_NAME FK_FIELD FK_TYPE
 * [ ] Move each query/operation into its own module to make Arbor.Tree less busy.
 * [ ] ID finders (?): root_ids, child_ids(target), etc...
