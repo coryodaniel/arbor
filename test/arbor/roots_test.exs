@@ -3,8 +3,8 @@ defmodule Arbor.RootsTest do
 
   describe "roots/0 with an integer PK" do
     test "returns root nodes" do
-      [dog_root|_] = create_chatter("pupperinos")
-      [cat_root|_] = create_chatter("kittehs")
+      [dog_root | _] = create_chatter("pupperinos")
+      [cat_root | _] = create_chatter("kittehs")
 
       roots = Comment.roots
               |> Comment.by_inserted_at

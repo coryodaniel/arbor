@@ -1,6 +1,6 @@
 defmodule Arbor.Mixfile do
   use Mix.Project
-  @version "0.1.1"
+  @version "1.0.0"
 
   def project do
     [
@@ -12,9 +12,7 @@ defmodule Arbor.Mixfile do
       package: package,
       deps: deps,
       aliases: aliases,
-      docs: docs,
-      test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: preferred_cli_env
+      docs: docs
     ]
   end
 
@@ -32,18 +30,9 @@ defmodule Arbor.Mixfile do
   defp deps do
     [
       {:ecto, ">= 2.0.0"},
-      {:postgrex, ">= 0.0.0", optional: true},
-
-      {:dialyxir, "~> 0.3.0", only: :dev},
-      {:mix_test_watch, "~> 0.2", only: :dev},
-
+      {:postgrex, ">= 0.0.0"},
       {:earmark, "~> 1.0.1", only: [:docs, :dev]},
-      {:ex_doc, "~> 0.13.0", only: [:docs, :dev]},
-
-      {:excoveralls, "~> 0.5", only: :test},
-      {:inch_ex, "~> 0.5", only: [:dev, :test]},
-      {:credo, "~> 0.4", only: [:dev, :test]},
-      {:dogma, "~> 0.1", only: [:dev, :test]}
+      {:ex_doc, "~> 0.13.0", only: [:docs, :dev]}
     ]
   end
 
@@ -65,15 +54,6 @@ defmodule Arbor.Mixfile do
       extras: ["README.md"],
       source_ref: "v#{@version}",
       source_url: "https://github.com/coryodaniel/arbor"
-    ]
-  end
-
-  defp preferred_cli_env do
-    [
-      "coveralls": :test,
-      "coveralls.detail": :test,
-      "coveralls.post": :test,
-      "coveralls.html": :test
     ]
   end
 end

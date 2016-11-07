@@ -3,7 +3,7 @@ defmodule Arbor.DescendantsTest do
 
   describe "descendants/1 with an integer PK" do
     test "given a struct w/ returns its descendants" do
-      [root|tail] = create_chatter("pupperinos")
+      [root | tail] = create_chatter("pupperinos")
       _cat_comments = create_chatter("kittehs")
 
       dog_thread = root

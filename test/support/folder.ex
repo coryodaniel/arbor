@@ -1,4 +1,5 @@
 defmodule Arbor.Folder do
+  @moduledoc false
   use Ecto.Schema
   use Arbor.Tree,
     foreign_key: :parent_id,

@@ -7,8 +7,6 @@
 Ecto nested-set and tree traversal using CTEs. Arbor uses a `parent_id` field
 and CTEs to create simple deep nested SQL hierarchies.
 
-This is currently a WIP. Not all tree methods have been implemented, see TODOs below.
-
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
@@ -133,28 +131,3 @@ The `mix test` task will drop and create the database for each run.
 ```elixir
 mix test
 ```
-
-## TODO
-
-* Common tree operations
-  * [x] descendants
-  * [x] children
-  * [x] siblings
-  * [x] roots
-  * [x] parent
-  * [x] ancestors
-  * [ ] path (ancestors + target)
-  * [ ] subtree (target + children)
-  * [ ] delete (nilify, destroy, adopt)
-  * [ ] move
-  * [ ] leafs  
-* [ ] Document macros...
-* [ ] depth selector on descendants and subtree... Add `AND cardinality(tree.ancestors) < XXX` to recursive section
-* [ ] arbor.gen.migration SCHEMA_NAME FK_FIELD FK_TYPE
-* [ ] Move each query/operation into its own module to make Arbor.Tree less busy.
-* [ ] ID finders (?): root_ids, child_ids(target), etc...
-* [ ] Boolean functions: is_root?, has_children?, etc...
-* [ ] Support for multiple trees? The tree name could be prefixed on tree methods...
-    ```elixir
-      use Arbor, my_tree: opts, my_other_tree: more_opts
-      ```
