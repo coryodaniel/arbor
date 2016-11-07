@@ -1,6 +1,6 @@
 defmodule Arbor.Mixfile do
   use Mix.Project
-  @version "0.1.0"
+  @version "0.1.1"
 
   def project do
     [
@@ -39,7 +39,7 @@ defmodule Arbor.Mixfile do
 
       {:earmark, "~> 1.0.1", only: [:docs, :dev]},
       {:ex_doc, "~> 0.13.0", only: [:docs, :dev]},
-      
+
       {:excoveralls, "~> 0.5", only: :test},
       {:inch_ex, "~> 0.5", only: [:dev, :test]},
       {:credo, "~> 0.4", only: [:dev, :test]},

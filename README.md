@@ -5,7 +5,7 @@
 Ecto nested-set and tree traversal using CTEs. Arbor uses a `parent_id` field
 and CTEs to create simple deep nested SQL hierarchies.
 
-This is currently a WIP. Only children/1 and descendants/1 are currently implemented.
+This is currently a WIP. Not all tree methods have been implemented, see TODOs below.
 
 ## Installation
 
@@ -44,12 +44,38 @@ defmodule Comment do
 end
 ```
 
+All methods return composable Ecto queries. For in depth examples see the [tests](./test/arbor)
+
+### Roots
+
+Returns root level records.
+
+```elixir
+roots = Comment.roots
+        |> Repo.all
+```
+
+
+### Siblings
+
+Return the siblings of a record.
+
+```elixir
+siblings = my_comment
+           |> Comment.siblings
+           |> Comment.order_by_popularity
+           |> Repo.all
+```
+
 ### Descendants
 
 Returns the entire descendant tree of a record.
 
 ```elixir
-Comment.descendants(my_comment)
+descendants = my_comment
+              |> Comment.descendants
+              |> Comment.order_by_inserted_at
+              |> Repo.all              
 ```
 
 ### Children
@@ -57,7 +83,19 @@ Comment.descendants(my_comment)
 Returns the immediate children of a record.
 
 ```elixir
-Comment.children(my_comment)
+children = my_comment
+           |> Comment.children
+           |> Repo.all
+```
+
+### Parent
+
+Returns the record's parent.
+
+```elixir
+parent = my_comment
+         |> Comment.parent
+         |> Repo.first
 ```
 
 ## Options
@@ -87,18 +125,17 @@ mix test
 * Common tree operations
   * [x] descendants
   * [x] children
-  * [ ] root
-  * [ ] leafs
-  * [ ] parent
-  * [ ] siblings
+  * [x] siblings
+  * [x] roots
+  * [x] parent
   * [ ] ancestors
   * [ ] path (ancestors + target)
   * [ ] subtree (target + children)
   * [ ] delete (nilify, destroy, adopt)
   * [ ] move
-  * [ ] branches (?)  
-* [ ] Docs...?
-* [ ] depth selector, include depth or array size in CTE?
+  * [ ] leafs  
+* [ ] Docs
+* [ ] depth selector on descendants and subtree, include depth or array size in CTE?
 * [ ] arbor.gen.migration SCHEMA_NAME FK_FIELD FK_TYPE
 * [ ] Move each query/operation into its own module to make Arbor.Tree less busy.
 * [ ] ID finders (?): root_ids, child_ids(target), etc...

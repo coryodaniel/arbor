@@ -7,8 +7,7 @@ defmodule Arbor.Tree do
     end
   end
 
-  defmacro __before_compile__(%{module: definition} = env) do
-
+  defmacro __before_compile__(%{module: definition} = _env) do
     arbor_opts = Module.get_attribute(definition, :arbor_opts)
 
     {primary_key, primary_key_type, _} = Module.get_attribute(definition, :primary_key)
@@ -37,6 +36,23 @@ defmodule Arbor.Tree do
 
     quote do
       import Ecto.Query
+
+      def parent(struct) do
+        from t in unquote(definition),
+          where: fragment(unquote("#{opts[:primary_key]} = ?"), type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type])))
+      end
+
+      def roots do
+        from t in unquote(definition),
+          where: fragment(unquote("#{opts[:foreign_key]} IS NULL"))
+      end
+
+      def siblings(struct) do
+        from t in unquote(definition),
+          where: t.unquote(opts[:primary_key]) != type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type])),
+          where: fragment(unquote("#{opts[:foreign_key]} = ?"),
+                          type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type])))
+      end
 
       def children(struct) do
         from t in unquote(definition),
