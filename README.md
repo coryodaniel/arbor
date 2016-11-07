@@ -7,6 +7,8 @@
 Ecto nested-set and tree traversal using CTEs. Arbor uses a `parent_id` field
 and CTEs to create simple deep nested SQL hierarchies.
 
+The goal of this project is to allow easy deep nesting of SQL data without giving up referential integrity (Materialized Path) or having a potential large closure table.
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
