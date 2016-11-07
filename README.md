@@ -1,5 +1,7 @@
 # Arbor
 
+[![Build Status](https://travis-ci.org/coryodaniel/arbor.svg)](https://travis-ci.org/coryodaniel/arbor)
+
 Ecto nested-set and tree traversal using CTEs. Arbor uses a `parent_id` field
 and CTEs to create simple deep nested SQL hierarchies.
 
