@@ -15,7 +15,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
     ```elixir
     def deps do
-      [{:arbor, "~> 0.1.0"}]
+      [{:arbor, "~> 1.0.0"}]
     end
     ```
 
