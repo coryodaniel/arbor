@@ -9,6 +9,7 @@ defmodule TestRepo.Migrations.CreateFoldersAndComments do
 
       timestamps
     end
+    # create index(:comments, [:parent_id])
 
     create table(:folders, primary_key: false) do
       add :id, :binary_id, primary_key: true
@@ -17,5 +18,6 @@ defmodule TestRepo.Migrations.CreateFoldersAndComments do
 
       timestamps
     end
+    # create index(:folders, [:parent_id])
   end
 end

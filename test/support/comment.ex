@@ -16,6 +16,6 @@ defmodule Arbor.Comment do
 
   def by_inserted_at(query \\ __MODULE__) do
     from c in query,
-         order_by: [asc: :inserted_at]
+    order_by: [asc: :inserted_at]
   end
 end
