@@ -1,11 +1,11 @@
 defmodule Arbor.Mixfile do
   use Mix.Project
-  @version "1.0.1"
+  @version "1.0.3"
 
   def project do
     [
       app: :arbor,
-      description: "Ecto tree / hierarchy traversal using CTEs",
+      description: "Ecto adjacency list and tree traversal",
       version: @version,
       elixir: "~> 1.2",
       elixirc_paths: elixirc_paths(Mix.env),

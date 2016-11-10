@@ -5,10 +5,10 @@ defmodule Arbor.SiblingsTest do
     test "given a struct w/ returns it's children" do
       [_, _, leaf1, leaf2, _, _] = create_chatter("pupperinos")
 
-      siblings = leaf1
-                 |> Comment.siblings
-                 |> Comment.by_inserted_at
-                 |> Repo.all
+      siblings =
+        leaf1
+        |> Comment.siblings
+        |> Repo.all
 
       assert siblings == [leaf2]
     end
@@ -25,12 +25,14 @@ defmodule Arbor.SiblingsTest do
       taxes2016 = create_folder("taxes-2016", parent: docs)
       _movies   = create_folder("movies", parent: downloads)
 
-      siblings = resumes
-                |> Folder.siblings
-                |> Folder.by_inserted_at
-                |> Repo.all
+      siblings =
+        resumes
+        |> Folder.siblings
+        |> Repo.all
 
-      assert siblings == [taxes2015, taxes2016]
+      assert length(siblings) == 2
+      assert Enum.member?(siblings, taxes2015)
+      assert Enum.member?(siblings, taxes2016)
     end
   end
 end

@@ -88,39 +88,42 @@ defmodule Arbor.Tree do
         from t in unquote(definition),
           join: g in fragment(unquote("""
           WITH RECURSIVE #{opts[:tree_name]} AS (
-            SELECT #{opts[:primary_key]}, ARRAY[]::#{opts[:array_type]}[] AS ancestors, FALSE AS cycle
+            SELECT #{opts[:primary_key]},
+                   #{opts[:foreign_key]},
+                   0 AS depth
             FROM #{opts[:table_name]}
-            WHERE #{opts[:foreign_key]} IS NULL
+            WHERE #{opts[:primary_key]} = ?
           UNION ALL
-            SELECT
-              #{opts[:table_name]}.#{opts[:primary_key]},
-              #{opts[:tree_name]}.ancestors || #{opts[:table_name]}.#{opts[:foreign_key]},
-              #{opts[:table_name]}.#{opts[:foreign_key]} = ANY(#{opts[:tree_name]}.ancestors)
-            FROM #{opts[:table_name]}, #{opts[:tree_name]}
-            WHERE #{opts[:table_name]}.#{opts[:foreign_key]} = #{opts[:tree_name]}.#{opts[:primary_key]}
+            SELECT #{opts[:table_name]}.#{opts[:primary_key]},
+                   #{opts[:table_name]}.#{opts[:foreign_key]},
+                   #{opts[:tree_name]}.depth + 1
+            FROM #{opts[:table_name]}
+              JOIN #{opts[:tree_name]}
+              ON #{opts[:tree_name]}.#{opts[:foreign_key]} = #{opts[:table_name]}.#{opts[:primary_key]}
           )
-          SELECT unnest(ancestors) AS ancestor_id
+          SELECT *
           FROM #{opts[:tree_name]}
-          WHERE #{opts[:primary_key]} = ?
           """), type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type]))),
-          on: t.unquote(opts[:primary_key]) == g.ancestor_id
+          on: t.unquote(opts[:primary_key]) == g.parent_id
       end
 
       def descendants(struct) do
         from t in unquote(definition),
-          join: g in fragment(unquote("""
+          where: t.id in fragment(unquote("""
           WITH RECURSIVE #{opts[:tree_name]} AS (
-            SELECT #{opts[:primary_key]}, ARRAY[]::#{opts[:array_type]}[] AS descendants
+            SELECT #{opts[:primary_key]},
+                   0 AS depth
             FROM #{opts[:table_name]}
             WHERE #{opts[:foreign_key]} = ?
           UNION ALL
-            SELECT #{opts[:table_name]}.#{opts[:primary_key]}, #{opts[:tree_name]}.descendants || #{opts[:table_name]}.#{opts[:foreign_key]}
-            FROM #{opts[:table_name]}, #{opts[:tree_name]}
-            WHERE #{opts[:table_name]}.#{opts[:foreign_key]} = #{opts[:tree_name]}.#{opts[:primary_key]}
+            SELECT #{opts[:table_name]}.#{opts[:primary_key]},
+                   #{opts[:tree_name]}.depth + 1
+            FROM #{opts[:table_name]}
+              JOIN #{opts[:tree_name]}
+              ON #{opts[:table_name]}.#{opts[:foreign_key]} = #{opts[:tree_name]}.#{opts[:primary_key]}
           )
-          SELECT * FROM #{opts[:tree_name]}
-          """), type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type]))),
-          on: t.unquote(opts[:primary_key]) == g.unquote(opts[:primary_key])
+          SELECT id FROM #{opts[:tree_name]}
+          """), type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type])))
       end
     end
   end

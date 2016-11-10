@@ -15,7 +15,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
     ```elixir
     def deps do
-      [{:arbor, "~> 1.0.0"}]
+      [{:arbor, "~> 1.0.3"}]
     end
     ```
 
@@ -26,6 +26,31 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
       [applications: [:arbor]]
     end
     ```
+
+
+## Benchmarks
+
+Arbor has been [benchmarked](https://github.com/coryodaniel/arbor_bench) on 10mm+ record tables with efficient results:
+
+10,000,000 rows, 25% root
+```
+Running siblings
+	10000 runs
+	Total time: 1.793026000000013
+	Avg: 1.7930260000000131e-4
+Running children
+	10000 runs
+	Total time: 1.5967949999999786
+	Avg: 1.5967949999999787e-4
+Running descendants
+	10000 runs
+	Total time: 2.5418830000000012
+	Avg: 2.5418830000000013e-4
+Running ancestors
+	10000 runs
+	Total time: 2.87076499999998
+	Avg: 2.87076499999998e-4
+```
 
 ## Usage
 

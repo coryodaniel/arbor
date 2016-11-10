@@ -6,10 +6,11 @@ defmodule Arbor.DescendantsTest do
       [root | tail] = create_chatter("pupperinos")
       _cat_comments = create_chatter("kittehs")
 
-      dog_thread = root
-                   |> Comment.descendants
-                   |> Comment.by_inserted_at
-                   |> Repo.all
+      dog_thread =
+        root
+        |> Comment.descendants
+        |> Comment.by_inserted_at
+        |> Repo.all
 
       assert dog_thread == tail
     end
@@ -21,16 +22,18 @@ defmodule Arbor.DescendantsTest do
       docs = create_folder("Documents", parent: root)
       downloads = create_folder("Downloads", parent: root)
 
-      resumes = create_folder("resumes", parent: docs)
-      taxes   = create_folder("taxes", parent: docs)
-      movies  = create_folder("movies", parent: downloads)
+      create_folder("resumes", parent: docs)
+      create_folder("taxes", parent: docs)
+      create_folder("movies", parent: downloads)
 
-      folders = root
-                |> Folder.descendants
-                |> Folder.by_inserted_at
-                |> Repo.all
+      folders =
+        root
+        |> Folder.descendants
+        |> Folder.by_inserted_at
+        |> Repo.all
+        |> Enum.map(&(&1.name))
 
-      assert folders == [docs, downloads, resumes, taxes, movies]
+      assert folders == ["Documents", "Downloads", "resumes", "taxes", "movies"]
     end
   end
 end

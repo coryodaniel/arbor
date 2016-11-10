@@ -6,11 +6,11 @@ defmodule Arbor.RootsTest do
       [dog_root | _] = create_chatter("pupperinos")
       [cat_root | _] = create_chatter("kittehs")
 
-      roots = Comment.roots
-              |> Comment.by_inserted_at
-              |> Repo.all
+      roots = Comment.roots |> Repo.all
 
-      assert roots == [dog_root, cat_root]
+      assert length(roots) == 2
+      assert Enum.member?(roots, dog_root)
+      assert Enum.member?(roots, cat_root)
     end
   end
 
@@ -24,11 +24,11 @@ defmodule Arbor.RootsTest do
       create_folder("Documents", parent: raul)
       create_folder("Downloads", parent: raul)
 
-      roots = Folder.roots
-              |> Folder.by_inserted_at
-              |> Repo.all
+      roots = Folder.roots |> Repo.all
 
-      assert roots == [chauncy, raul]
+      assert length(roots) == 2
+      assert Enum.member?(roots, chauncy)
+      assert Enum.member?(roots, raul)
     end
   end
 end

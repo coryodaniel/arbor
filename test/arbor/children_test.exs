@@ -7,10 +7,11 @@ defmodule Arbor.ChildrenTest do
 
       children = branch1
                  |> Comment.children
-                 |> Comment.by_inserted_at
                  |> Repo.all
 
-      assert children == [leaf1, leaf2]
+      assert length(children) == 2
+      assert Enum.member?(children, leaf1)
+      assert Enum.member?(children, leaf2)
     end
   end
 
@@ -29,7 +30,9 @@ defmodule Arbor.ChildrenTest do
                 |> Folder.by_inserted_at
                 |> Repo.all
 
-      assert folders == [resumes, taxes]
+      assert length(folders) == 2
+      assert Enum.member?(folders, resumes)
+      assert Enum.member?(folders, taxes)     
     end
   end
 end
