@@ -97,7 +97,7 @@ siblings = my_comment
 Returns the entire ancestor (parent's parent's parent, etc) path to the record, but not including the record.
 
 ```elixir
-descendants = my_comment
+ancestors = my_comment
               |> Comment.ancestors
               |> Comment.order_by_inserted_at
               |> Repo.all              
