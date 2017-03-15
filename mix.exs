@@ -9,10 +9,10 @@ defmodule Arbor.Mixfile do
       version: @version,
       elixir: "~> 1.2",
       elixirc_paths: elixirc_paths(Mix.env),
-      package: package,
-      deps: deps,
-      aliases: aliases,
-      docs: docs
+      package: package(),
+      deps: deps(),
+      aliases: aliases(),
+      docs: docs()
     ]
   end
 
