@@ -104,7 +104,7 @@ defmodule Arbor.Tree do
           SELECT *
           FROM #{opts[:tree_name]}
           """), type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type]))),
-          on: t.unquote(opts[:primary_key]) == g.parent_id
+          on: t.unquote(opts[:primary_key]) == g.unquote(opts[:foreign_key])
       end
 
       def descendants(struct) do
