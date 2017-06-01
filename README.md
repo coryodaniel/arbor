@@ -62,7 +62,7 @@ defmodule Comment do
 
   schema "comments" do
     field :body, :string
-    belongs_to :parent, Arbor.Comment
+    belongs_to :parent, __MODULE__
 
     timestamps
   end  
