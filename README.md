@@ -11,21 +11,13 @@ and CTEs to create simple deep tree-like SQL hierarchies.
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
-  1. Add `arbor` to your list of dependencies in `mix.exs`:
+Add `arbor` to your list of dependencies in `mix.exs`:
 
-    ```elixir
-    def deps do
-      [{:arbor, "~> 1.0.3"}]
-    end
-    ```
-
-  2. Ensure `arbor` is started before your application:
-
-    ```elixir
-    def application do
-      [applications: [:arbor]]
-    end
-    ```
+```elixir
+  def deps do
+    [{:arbor, "~> 1.0.3"}]
+  end
+```
 
 
 ## Benchmarks
