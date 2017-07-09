@@ -14,6 +14,40 @@ defmodule Arbor.DescendantsTest do
 
       assert dog_thread == tail
     end
+
+    test "given a depth returns its descendants up to that depth" do
+      [root | descendants] = create_chatter("pupperinos")
+      [branch1, _leaf1, _leaf2, branch2, _leaf3] = descendants
+      _cat_comments = create_chatter("kittehs")
+
+      dog_thread =
+        root
+        |> Comment.descendants(1)
+        |> Repo.all
+
+      assert dog_thread == [branch1, branch2]
+
+      dog_thread =
+        root
+        |> Comment.descendants(2)
+        |> Repo.all
+
+      assert dog_thread == descendants
+
+      dog_thread =
+        root
+        |> Comment.descendants(3)
+        |> Repo.all
+
+      assert dog_thread == descendants
+
+      dog_thread =
+        root
+        |> Comment.descendants(9999)
+        |> Repo.all
+
+      assert dog_thread == descendants
+    end
   end
 
   describe "descendants/1 with a UUID PK" do
