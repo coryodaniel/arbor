@@ -14,7 +14,7 @@ defmodule Arbor.Folder do
     field :name, :string
     belongs_to :parent, Arbor.Folder
 
-    timestamps
+    timestamps()
   end
 
   def by_inserted_at(query \\ __MODULE__) do

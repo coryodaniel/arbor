@@ -15,7 +15,7 @@ Add `arbor` to your list of dependencies in `mix.exs`:
 
 ```elixir
   def deps do
-    [{:arbor, "~> 1.0.3"}]
+    [{:arbor, "~> 1.0.5"}]
   end
 ```
 

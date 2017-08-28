@@ -11,7 +11,7 @@ defmodule Arbor.Comment do
     field :body, :string
     belongs_to :parent, Arbor.Comment
 
-    timestamps
+    timestamps()
   end
 
   def by_inserted_at(query \\ __MODULE__) do

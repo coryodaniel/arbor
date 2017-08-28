@@ -7,7 +7,7 @@ defmodule TestRepo.Migrations.CreateFoldersAndComments do
       add :body, :string
       add :parent_id, references(:comments), null: true
 
-      timestamps
+      timestamps()
     end
     create index(:comments, [:parent_id])
 
@@ -16,7 +16,7 @@ defmodule TestRepo.Migrations.CreateFoldersAndComments do
       add :name, :string
       add :parent_id, references(:folders, type: :binary_id), null: true
 
-      timestamps
+      timestamps()
     end
     create index(:folders, [:parent_id])
   end

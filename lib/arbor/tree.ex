@@ -19,7 +19,7 @@ defmodule Arbor.Tree do
           field :body, :string
           belongs_to :parent, Arbor.Comment
 
-          timestamps
+          timestamps()
         end
       end
   """
