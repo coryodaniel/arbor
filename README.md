@@ -57,7 +57,7 @@ defmodule Comment do
     belongs_to :parent, __MODULE__
 
     timestamps
-  end  
+  end
 end
 ```
 
@@ -92,7 +92,7 @@ Returns the entire ancestor (parent's parent's parent, etc) path to the record, 
 ancestors = my_comment
               |> Comment.ancestors
               |> Comment.order_by_inserted_at
-              |> Repo.all              
+              |> Repo.all
 ```
 
 
@@ -104,7 +104,17 @@ Returns the entire descendant tree of a record, but not including the record.
 descendants = my_comment
               |> Comment.descendants
               |> Comment.order_by_inserted_at
-              |> Repo.all              
+              |> Repo.all
+```
+
+A second parameter can be passed to `descendants` to specify how deep
+from the root of the tree to retrieve the descendants from.
+
+```elixir
+descendants = my_comment
+              |> Comment.descendants(2)
+              |> Comment.order_by_inserted_at
+              |> Repo.all
 ```
 
 ### Children
