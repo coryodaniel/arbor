@@ -32,7 +32,28 @@ defmodule Arbor.ChildrenTest do
 
       assert length(folders) == 2
       assert Enum.member?(folders, resumes)
-      assert Enum.member?(folders, taxes)     
+      assert Enum.member?(folders, taxes)
+    end
+  end
+
+  describe "children/1 with a UUID PK and other than id column name" do
+    test "given a struct w/ returns it's children" do
+      root = create_foreign("chauncy")
+      docs = create_foreign("Documents", parent: root)
+      downloads = create_foreign("Downloads", parent: root)
+
+      resumes = create_foreign("resumes", parent: docs)
+      taxes   = create_foreign("taxes", parent: docs)
+      _movies  = create_foreign("movies", parent: downloads)
+
+      foreigns = docs
+                |> Foreign.children
+                |> Foreign.by_inserted_at
+                |> Repo.all
+
+      assert length(foreigns) == 2
+      assert Enum.member?(foreigns, resumes)
+      assert Enum.member?(foreigns, taxes)
     end
   end
 end

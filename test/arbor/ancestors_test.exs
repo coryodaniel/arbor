@@ -33,7 +33,30 @@ defmodule Arbor.AncestorsTest do
         |> Repo.all
         |> Enum.map(&(&1.name))
 
-      assert ancestors == ["chauncy", "Downloads", "movies"]      
+      assert ancestors == ["chauncy", "Downloads", "movies"]
+    end
+  end
+
+
+  describe "ancestors/1 with a UUID PK and other than id column name" do
+    test "given a struct w/ returns its ancestors" do
+      root = create_foreign("chauncy")
+      docs = create_foreign("Documents", parent: root)
+      downloads = create_foreign("Downloads", parent: root)
+
+      create_foreign("resumes", parent: docs)
+      create_foreign("taxes", parent: docs)
+      movies = create_foreign("movies", parent: downloads)
+      lotr = create_foreign("lotr", parent: movies)
+
+      ancestors =
+        lotr
+        |> Foreign.ancestors
+        |> Foreign.by_inserted_at
+        |> Repo.all
+        |> Enum.map(&(&1.name))
+
+      assert ancestors == ["chauncy", "Downloads", "movies"]
     end
   end
 end

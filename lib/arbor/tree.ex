@@ -109,7 +109,7 @@ defmodule Arbor.Tree do
 
       def descendants(struct, depth \\ 2147483647) do
         from t in unquote(definition),
-          where: t.id in fragment(unquote("""
+          where: t.unquote(opts[:primary_key]) in fragment(unquote("""
           WITH RECURSIVE #{opts[:tree_name]} AS (
             SELECT #{opts[:primary_key]},
                    0 AS depth
@@ -123,7 +123,7 @@ defmodule Arbor.Tree do
               ON #{opts[:table_name]}.#{opts[:foreign_key]} = #{opts[:tree_name]}.#{opts[:primary_key]}
             WHERE #{opts[:tree_name]}.depth + 1 < ?
           )
-          SELECT id FROM #{opts[:tree_name]}
+          SELECT #{opts[:primary_key]} FROM #{opts[:tree_name]}
           """), type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type])), type(^depth, :integer))
       end
     end

@@ -30,4 +30,22 @@ defmodule Arbor.ParentTest do
       assert parent == root
     end
   end
+
+  describe "parent/1 with a UUID PK and other than id column name" do
+    test "given a struct w/ returns it's children" do
+      root = create_foreign("chauncy")
+      docs = create_foreign("Documents", parent: root)
+      downloads = create_foreign("Downloads", parent: root)
+
+      create_foreign("resumes", parent: docs)
+      create_foreign("taxes", parent: docs)
+      create_foreign("movies", parent: downloads)
+
+      parent = downloads
+               |> Foreign.parent
+               |> Repo.one
+
+      assert parent == root
+    end
+  end
 end
