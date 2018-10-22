@@ -5,7 +5,7 @@ defmodule Arbor.TestCase do
     quote do
       use ExUnit.Case, unquote(opts)
       import Ecto.Query
-      alias Arbor.{Repo, Comment, Folder}
+      alias Arbor.{Repo, Comment, Folder, Foreign}
 
       def create_folder(name), do: create_folder(name, parent: nil)
       def create_folder(name, parent: parent) do
@@ -32,6 +32,16 @@ defmodule Arbor.TestCase do
           branch1, leaf1, leaf2,
           branch2, leaf3
         ]
+      end
+
+      def create_foreign(name), do: create_foreign(name, parent: nil)
+      def create_foreign(name, parent: parent) do
+        foreign = case parent do
+          nil -> %Foreign{name: name}
+          parent -> %Foreign{name: name, parent_uuid: parent.uuid}
+        end
+
+        foreign |> Repo.insert!
       end
     end
   end

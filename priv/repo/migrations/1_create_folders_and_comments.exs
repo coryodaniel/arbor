@@ -19,5 +19,14 @@ defmodule TestRepo.Migrations.CreateFoldersAndComments do
       timestamps()
     end
     create index(:folders, [:parent_id])
+
+    create table(:foreigns, primary_key: false) do
+      add :uuid, :binary_id, primary_key: true
+      add :name, :string
+      add :parent_uuid, references(:foreigns, type: :binary_id, column: :uuid), null: true
+
+      timestamps()
+    end
+    create index(:foreigns, [:parent_uuid])
   end
 end
