@@ -37,7 +37,17 @@ defmodule Arbor.Tree do
 
     {primary_key, primary_key_type, _} = Module.get_attribute(definition, :primary_key)
     struct_fields = Module.get_attribute(definition, :struct_fields)
-    {prefix, source} = struct_fields[:__meta__].source
+
+    struct_source = struct_fields[:__meta__].source
+
+    {prefix, source} =
+      cond do
+        is_bitstring(struct_source) ->
+          {struct_fields[:__meta__].prefix, struct_source}
+
+        is_tuple(struct_source) ->
+          struct_source
+      end
 
     array_type =
       case primary_key_type do
