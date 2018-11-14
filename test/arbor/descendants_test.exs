@@ -8,9 +8,9 @@ defmodule Arbor.DescendantsTest do
 
       dog_thread =
         root
-        |> Comment.descendants
-        |> Comment.by_inserted_at
-        |> Repo.all
+        |> Comment.descendants()
+        |> Comment.by_inserted_at()
+        |> Repo.all()
 
       assert dog_thread == tail
     end
@@ -23,28 +23,28 @@ defmodule Arbor.DescendantsTest do
       dog_thread =
         root
         |> Comment.descendants(1)
-        |> Repo.all
+        |> Repo.all()
 
       assert dog_thread == [branch1, branch2]
 
       dog_thread =
         root
         |> Comment.descendants(2)
-        |> Repo.all
+        |> Repo.all()
 
       assert dog_thread == descendants
 
       dog_thread =
         root
         |> Comment.descendants(3)
-        |> Repo.all
+        |> Repo.all()
 
       assert dog_thread == descendants
 
       dog_thread =
         root
         |> Comment.descendants(9999)
-        |> Repo.all
+        |> Repo.all()
 
       assert dog_thread == descendants
     end
@@ -62,10 +62,10 @@ defmodule Arbor.DescendantsTest do
 
       folders =
         root
-        |> Folder.descendants
-        |> Folder.by_inserted_at
-        |> Repo.all
-        |> Enum.map(&(&1.name))
+        |> Folder.descendants()
+        |> Folder.by_inserted_at()
+        |> Repo.all()
+        |> Enum.map(& &1.name)
 
       assert folders == ["Documents", "Downloads", "resumes", "taxes", "movies"]
     end
@@ -83,10 +83,10 @@ defmodule Arbor.DescendantsTest do
 
       foreigns =
         root
-        |> Foreign.descendants
-        |> Foreign.by_inserted_at
-        |> Repo.all
-        |> Enum.map(&(&1.name))
+        |> Foreign.descendants()
+        |> Foreign.by_inserted_at()
+        |> Repo.all()
+        |> Enum.map(& &1.name)
 
       assert foreigns == ["Documents", "Downloads", "resumes", "taxes", "movies"]
     end

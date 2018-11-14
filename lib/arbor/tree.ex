@@ -39,11 +39,12 @@ defmodule Arbor.Tree do
     struct_fields = Module.get_attribute(definition, :struct_fields)
     {prefix, source} = struct_fields[:__meta__].source
 
-    array_type = case primary_key_type do
-      :binary_id -> "UUID"
-      :id -> "integer"
-      _ -> "string"
-    end
+    array_type =
+      case primary_key_type do
+        :binary_id -> "UUID"
+        :id -> "integer"
+        _ -> "string"
+      end
 
     default_opts = [
       table_name: source,
@@ -63,68 +64,106 @@ defmodule Arbor.Tree do
       import Ecto.Query
 
       def roots do
-        from t in unquote(definition),
+        from(
+          t in unquote(definition),
           where: fragment(unquote("#{opts[:foreign_key]} IS NULL"))
+        )
       end
 
       def parent(struct) do
-        from t in unquote(definition),
-          where: fragment(unquote("#{opts[:primary_key]} = ?"), type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type])))
+        from(
+          t in unquote(definition),
+          where:
+            fragment(
+              unquote("#{opts[:primary_key]} = ?"),
+              type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type]))
+            )
+        )
       end
 
       def children(struct) do
-        from t in unquote(definition),
-          where: fragment(unquote("#{opts[:foreign_key]} = ?"), type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type])))
+        from(
+          t in unquote(definition),
+          where:
+            fragment(
+              unquote("#{opts[:foreign_key]} = ?"),
+              type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type]))
+            )
+        )
       end
 
       def siblings(struct) do
-        from t in unquote(definition),
-          where: t.unquote(opts[:primary_key]) != type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type])),
-          where: fragment(unquote("#{opts[:foreign_key]} = ?"),
-                          type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type])))
+        from(
+          t in unquote(definition),
+          where:
+            t.unquote(opts[:primary_key]) !=
+              type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type])),
+          where:
+            fragment(
+              unquote("#{opts[:foreign_key]} = ?"),
+              type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type]))
+            )
+        )
       end
 
       def ancestors(struct) do
-        from t in unquote(definition),
-          join: g in fragment(unquote("""
-          WITH RECURSIVE #{opts[:tree_name]} AS (
-            SELECT #{opts[:primary_key]},
-                   #{opts[:foreign_key]},
-                   0 AS depth
-            FROM #{opts[:table_name]}
-            WHERE #{opts[:primary_key]} = ?
-          UNION ALL
-            SELECT #{opts[:table_name]}.#{opts[:primary_key]},
-                   #{opts[:table_name]}.#{opts[:foreign_key]},
-                   #{opts[:tree_name]}.depth + 1
-            FROM #{opts[:table_name]}
-              JOIN #{opts[:tree_name]}
-              ON #{opts[:tree_name]}.#{opts[:foreign_key]} = #{opts[:table_name]}.#{opts[:primary_key]}
-          )
-          SELECT *
-          FROM #{opts[:tree_name]}
-          """), type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type]))),
+        from(
+          t in unquote(definition),
+          join:
+            g in fragment(
+              unquote("""
+              WITH RECURSIVE #{opts[:tree_name]} AS (
+                SELECT #{opts[:primary_key]},
+                       #{opts[:foreign_key]},
+                       0 AS depth
+                FROM #{opts[:table_name]}
+                WHERE #{opts[:primary_key]} = ?
+              UNION ALL
+                SELECT #{opts[:table_name]}.#{opts[:primary_key]},
+                       #{opts[:table_name]}.#{opts[:foreign_key]},
+                       #{opts[:tree_name]}.depth + 1
+                FROM #{opts[:table_name]}
+                  JOIN #{opts[:tree_name]}
+                  ON #{opts[:tree_name]}.#{opts[:foreign_key]} = #{opts[:table_name]}.#{
+                opts[:primary_key]
+              }
+              )
+              SELECT *
+              FROM #{opts[:tree_name]}
+              """),
+              type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type]))
+            ),
           on: t.unquote(opts[:primary_key]) == g.unquote(opts[:foreign_key])
+        )
       end
 
-      def descendants(struct, depth \\ 2147483647) do
-        from t in unquote(definition),
-          where: t.unquote(opts[:primary_key]) in fragment(unquote("""
-          WITH RECURSIVE #{opts[:tree_name]} AS (
-            SELECT #{opts[:primary_key]},
-                   0 AS depth
-            FROM #{opts[:table_name]}
-            WHERE #{opts[:foreign_key]} = ?
-          UNION ALL
-            SELECT #{opts[:table_name]}.#{opts[:primary_key]},
-                   #{opts[:tree_name]}.depth + 1
-            FROM #{opts[:table_name]}
-              JOIN #{opts[:tree_name]}
-              ON #{opts[:table_name]}.#{opts[:foreign_key]} = #{opts[:tree_name]}.#{opts[:primary_key]}
-            WHERE #{opts[:tree_name]}.depth + 1 < ?
-          )
-          SELECT #{opts[:primary_key]} FROM #{opts[:tree_name]}
-          """), type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type])), type(^depth, :integer))
+      def descendants(struct, depth \\ 2_147_483_647) do
+        from(
+          t in unquote(definition),
+          where:
+            t.unquote(opts[:primary_key]) in fragment(
+              unquote("""
+              WITH RECURSIVE #{opts[:tree_name]} AS (
+                SELECT #{opts[:primary_key]},
+                       0 AS depth
+                FROM #{opts[:table_name]}
+                WHERE #{opts[:foreign_key]} = ?
+              UNION ALL
+                SELECT #{opts[:table_name]}.#{opts[:primary_key]},
+                       #{opts[:tree_name]}.depth + 1
+                FROM #{opts[:table_name]}
+                  JOIN #{opts[:tree_name]}
+                  ON #{opts[:table_name]}.#{opts[:foreign_key]} = #{opts[:tree_name]}.#{
+                opts[:primary_key]
+              }
+                WHERE #{opts[:tree_name]}.depth + 1 < ?
+              )
+              SELECT #{opts[:primary_key]} FROM #{opts[:tree_name]}
+              """),
+              type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type])),
+              type(^depth, :integer)
+            )
+        )
       end
     end
   end

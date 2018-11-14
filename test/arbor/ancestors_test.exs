@@ -1,15 +1,14 @@
 defmodule Arbor.AncestorsTest do
   use Arbor.TestCase
 
-
   describe "ancestors/1 with an integer PK" do
     test "given a struct w/ returns its ancestors" do
       [root, branch1, _, leaf2, _, _] = create_chatter("pupperinos")
 
       ancestors =
         leaf2
-        |> Comment.ancestors
-        |> Repo.all
+        |> Comment.ancestors()
+        |> Repo.all()
 
       assert ancestors == [root, branch1]
     end
@@ -28,15 +27,14 @@ defmodule Arbor.AncestorsTest do
 
       ancestors =
         lotr
-        |> Folder.ancestors
-        |> Folder.by_inserted_at
-        |> Repo.all
-        |> Enum.map(&(&1.name))
+        |> Folder.ancestors()
+        |> Folder.by_inserted_at()
+        |> Repo.all()
+        |> Enum.map(& &1.name)
 
       assert ancestors == ["chauncy", "Downloads", "movies"]
     end
   end
-
 
   describe "ancestors/1 with a UUID PK and other than id column name" do
     test "given a struct w/ returns its ancestors" do
@@ -51,10 +49,10 @@ defmodule Arbor.AncestorsTest do
 
       ancestors =
         lotr
-        |> Foreign.ancestors
-        |> Foreign.by_inserted_at
-        |> Repo.all
-        |> Enum.map(&(&1.name))
+        |> Foreign.ancestors()
+        |> Foreign.by_inserted_at()
+        |> Repo.all()
+        |> Enum.map(& &1.name)
 
       assert ancestors == ["chauncy", "Downloads", "movies"]
     end
