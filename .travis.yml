@@ -1,9 +1,8 @@
 language: elixir
 otp_release:
-  - 18.2
-  - 19.1
+  - 20.2
 elixir:
-  - 1.4.0
-  - 1.4.4
+  - 1.6.6
+  - 1.7.4
 before_script:
   - export ARBOR_DB_USER=postgres
