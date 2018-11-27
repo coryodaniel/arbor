@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:10.3
+    container_name: pg-arbor
+    ports:
+      - "5432:5432"

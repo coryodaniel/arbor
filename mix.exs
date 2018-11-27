@@ -1,6 +1,6 @@
 defmodule Arbor.Mixfile do
   use Mix.Project
-  @version "1.0.6"
+  @version "1.1.0"
 
   def project do
     [
@@ -29,7 +29,7 @@ defmodule Arbor.Mixfile do
 
   defp deps do
     [
-      {:ecto, ">= 2.0.0"},
+      {:ecto_sql, ">= 3.0.0"},
       {:postgrex, ">= 0.0.0"},
       {:earmark, "~> 1.1", only: [:docs, :dev]},
       {:ex_doc, "~> 0.19", only: [:docs, :dev]}

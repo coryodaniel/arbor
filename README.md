@@ -13,9 +13,19 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
 Add `arbor` to your list of dependencies in `mix.exs`:
 
+For Ecto SQL 3+:
+
 ```elixir
   def deps do
-    [{:arbor, "~> 1.0.5"}]
+    [{:arbor, "~> 1.1.0"}]
+  end
+```
+
+For Ecto 2:
+
+```elixir
+  def deps do
+    [{:arbor, "~> 1.0.6"}]
   end
 ```
 
@@ -151,10 +161,14 @@ parent = my_comment
 
 You'll need PostgreSQL installed and a user that can create and drop databases.
 
+There is a docker-compose file for your convienence.
+
 You can specify it with the environment variable `ARBOR_DB_USER`.
 
 The `mix test` task will drop and create the database for each run.
 
-```elixir
-mix test
+```shell
+docker-compose up -d
+ARBOR_DB_USER=postgres mix test
+docker-compose down
 ```
