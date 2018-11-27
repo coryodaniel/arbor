@@ -8,5 +8,4 @@ config :arbor, Arbor.Repo,
   database: "arbor_test",
   username: System.get_env("ARBOR_DB_USER") || System.get_env("USER")
 
-config :logger, :console,
-  level: :error
+config :logger, :console, level: :error

@@ -5,9 +5,10 @@ defmodule Arbor.ChildrenTest do
     test "given a struct w/ returns it's children" do
       [_root, branch1, leaf1, leaf2, _, _] = create_chatter("pupperinos")
 
-      children = branch1
-                 |> Comment.children
-                 |> Repo.all
+      children =
+        branch1
+        |> Comment.children()
+        |> Repo.all()
 
       assert length(children) == 2
       assert Enum.member?(children, leaf1)
@@ -22,13 +23,14 @@ defmodule Arbor.ChildrenTest do
       downloads = create_folder("Downloads", parent: root)
 
       resumes = create_folder("resumes", parent: docs)
-      taxes   = create_folder("taxes", parent: docs)
-      _movies  = create_folder("movies", parent: downloads)
+      taxes = create_folder("taxes", parent: docs)
+      _movies = create_folder("movies", parent: downloads)
 
-      folders = docs
-                |> Folder.children
-                |> Folder.by_inserted_at
-                |> Repo.all
+      folders =
+        docs
+        |> Folder.children()
+        |> Folder.by_inserted_at()
+        |> Repo.all()
 
       assert length(folders) == 2
       assert Enum.member?(folders, resumes)
@@ -43,13 +45,14 @@ defmodule Arbor.ChildrenTest do
       downloads = create_foreign("Downloads", parent: root)
 
       resumes = create_foreign("resumes", parent: docs)
-      taxes   = create_foreign("taxes", parent: docs)
-      _movies  = create_foreign("movies", parent: downloads)
+      taxes = create_foreign("taxes", parent: docs)
+      _movies = create_foreign("movies", parent: downloads)
 
-      foreigns = docs
-                |> Foreign.children
-                |> Foreign.by_inserted_at
-                |> Repo.all
+      foreigns =
+        docs
+        |> Foreign.children()
+        |> Foreign.by_inserted_at()
+        |> Repo.all()
 
       assert length(foreigns) == 2
       assert Enum.member?(foreigns, resumes)

@@ -8,7 +8,7 @@ defmodule Arbor.Mixfile do
       description: "Ecto adjacency list and tree traversal",
       version: @version,
       elixir: "~> 1.2",
-      elixirc_paths: elixirc_paths(Mix.env),
+      elixirc_paths: elixirc_paths(Mix.env()),
       package: package(),
       deps: deps(),
       aliases: aliases(),
@@ -23,7 +23,7 @@ defmodule Arbor.Mixfile do
   defp aliases do
     [
       "db.reset": ["ecto.drop", "ecto.create", "ecto.migrate"],
-      "test": ["db.reset", "test"]
+      test: ["db.reset", "test"]
     ]
   end
 

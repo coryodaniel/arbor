@@ -7,8 +7,8 @@ defmodule Arbor.SiblingsTest do
 
       siblings =
         leaf1
-        |> Comment.siblings
-        |> Repo.all
+        |> Comment.siblings()
+        |> Repo.all()
 
       assert siblings == [leaf2]
     end
@@ -20,15 +20,15 @@ defmodule Arbor.SiblingsTest do
       docs = create_folder("Documents", parent: root)
       downloads = create_folder("Downloads", parent: root)
 
-      resumes   = create_folder("resumes", parent: docs)
+      resumes = create_folder("resumes", parent: docs)
       taxes2015 = create_folder("taxes-2015", parent: docs)
       taxes2016 = create_folder("taxes-2016", parent: docs)
-      _movies   = create_folder("movies", parent: downloads)
+      _movies = create_folder("movies", parent: downloads)
 
       siblings =
         resumes
-        |> Folder.siblings
-        |> Repo.all
+        |> Folder.siblings()
+        |> Repo.all()
 
       assert length(siblings) == 2
       assert Enum.member?(siblings, taxes2015)
@@ -42,15 +42,15 @@ defmodule Arbor.SiblingsTest do
       docs = create_foreign("Documents", parent: root)
       downloads = create_foreign("Downloads", parent: root)
 
-      resumes   = create_foreign("resumes", parent: docs)
+      resumes = create_foreign("resumes", parent: docs)
       taxes2015 = create_foreign("taxes-2015", parent: docs)
       taxes2016 = create_foreign("taxes-2016", parent: docs)
-      _movies   = create_foreign("movies", parent: downloads)
+      _movies = create_foreign("movies", parent: downloads)
 
       siblings =
         resumes
-        |> Foreign.siblings
-        |> Repo.all
+        |> Foreign.siblings()
+        |> Repo.all()
 
       assert length(siblings) == 2
       assert Enum.member?(siblings, taxes2015)

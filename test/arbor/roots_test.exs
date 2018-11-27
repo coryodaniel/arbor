@@ -6,7 +6,7 @@ defmodule Arbor.RootsTest do
       [dog_root | _] = create_chatter("pupperinos")
       [cat_root | _] = create_chatter("kittehs")
 
-      roots = Comment.roots |> Repo.all
+      roots = Comment.roots() |> Repo.all()
 
       assert length(roots) == 2
       assert Enum.member?(roots, dog_root)
@@ -24,7 +24,7 @@ defmodule Arbor.RootsTest do
       create_folder("Documents", parent: raul)
       create_folder("Downloads", parent: raul)
 
-      roots = Folder.roots |> Repo.all
+      roots = Folder.roots() |> Repo.all()
 
       assert length(roots) == 2
       assert Enum.member?(roots, chauncy)
@@ -42,7 +42,7 @@ defmodule Arbor.RootsTest do
       create_foreign("Documents", parent: raul)
       create_foreign("Downloads", parent: raul)
 
-      roots = Foreign.roots |> Repo.all
+      roots = Foreign.roots() |> Repo.all()
 
       assert length(roots) == 2
       assert Enum.member?(roots, chauncy)

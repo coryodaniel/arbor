@@ -1,9 +1,10 @@
 defmodule Arbor.Foreign do
   @moduledoc false
   use Ecto.Schema
+
   use Arbor.Tree,
-      foreign_key: :parent_uuid,
-      foreign_key_type: :binary_id
+    foreign_key: :parent_uuid,
+    foreign_key_type: :binary_id
 
   import Ecto.Query
 
@@ -11,14 +12,16 @@ defmodule Arbor.Foreign do
   @foreign_key_type :binary_id
 
   schema "foreigns" do
-    field :name, :string
-    belongs_to :parent, Arbor.Foreign, foreign_key: :parent_uuid
+    field(:name, :string)
+    belongs_to(:parent, Arbor.Foreign, foreign_key: :parent_uuid)
 
     timestamps()
   end
 
   def by_inserted_at(query \\ __MODULE__) do
-    from f in query,
-         order_by: [asc: :inserted_at]
+    from(
+      f in query,
+      order_by: [asc: :inserted_at]
+    )
   end
 end
