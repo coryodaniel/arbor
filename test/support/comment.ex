@@ -4,7 +4,8 @@ defmodule Arbor.Comment do
 
   use Arbor.Tree,
     foreign_key: :parent_id,
-    foreign_key_type: :integer
+    foreign_key_type: :integer,
+    prefixes: ["private"]
 
   import Ecto.Query
 

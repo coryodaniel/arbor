@@ -91,4 +91,19 @@ defmodule Arbor.DescendantsTest do
       assert foreigns == ["Documents", "Downloads", "resumes", "taxes", "movies"]
     end
   end
+
+  describe "descendants/1 in another schema" do
+    test "given a struct w/ a schema prefix it returns its ancestors" do
+      [root | _] = create_chatter("pupperinos")
+
+      descendants =
+        root.__meta__.prefix
+        |> put_in("private")
+        |> Comment.descendants()
+        |> Comment.by_inserted_at()
+        |> Repo.all()
+
+      assert [] == descendants
+    end
+  end
 end

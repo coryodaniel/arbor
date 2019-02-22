@@ -59,4 +59,18 @@ defmodule Arbor.ChildrenTest do
       assert Enum.member?(foreigns, taxes)
     end
   end
+
+  describe "children/1" do
+    test "given a struct w/ a prefix returns it's children" do
+      [_, branch1, _, _, _, _] = create_chatter("pupperinos")
+
+      children =
+        branch1.__meta__.prefix
+        |> put_in("private")
+        |> Comment.children()
+        |> Repo.all()
+
+      assert children == []
+    end
+  end
 end

@@ -57,4 +57,18 @@ defmodule Arbor.SiblingsTest do
       assert Enum.member?(siblings, taxes2016)
     end
   end
+
+  describe "siblings/1 in another schema" do
+    test "given a struct w/ a prefix returns its ancestors" do
+      [_, _, leaf1, _, _, _] = create_chatter("pupperinos")
+
+      siblings =
+        leaf1.__meta__.prefix
+        |> put_in("private")
+        |> Comment.siblings()
+        |> Repo.all()
+
+      assert siblings == []
+    end
+  end
 end

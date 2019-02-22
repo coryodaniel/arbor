@@ -28,5 +28,23 @@ defmodule TestRepo.Migrations.CreateFoldersAndComments do
       timestamps()
     end
     create index(:foreigns, [:parent_uuid])
+
+    execute(
+      """
+      CREATE SCHEMA private
+      """,
+      """
+      DROP SCHEMA private
+      """
+    )
+
+    execute(
+      """
+      CREATE VIEW private.comments AS SELECT * from comments WHERE id = -1
+      """,
+      """
+      DROP VIEW private.comments
+      """
+    )
   end
 end

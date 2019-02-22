@@ -49,4 +49,15 @@ defmodule Arbor.RootsTest do
       assert Enum.member?(roots, raul)
     end
   end
+
+  describe "roots/1" do
+    test "uses the given prefix" do
+      create_chatter("pupperinos")
+      create_chatter("kittehs")
+
+      roots = Comment.roots("private") |> Repo.all()
+
+      assert roots == []
+    end
+  end
 end

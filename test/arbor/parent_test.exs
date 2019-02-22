@@ -51,4 +51,18 @@ defmodule Arbor.ParentTest do
       assert parent == root
     end
   end
+
+  describe "parent/1 in another schema" do
+    test "given a struct w/ a prefix returns its ancestors" do
+      [_, _, leaf1, _, _, _] = create_chatter("pupperinos")
+
+      parent =
+        leaf1.__meta__.prefix
+        |> put_in("private")
+        |> Comment.parent()
+        |> Repo.one()
+
+      assert parent == nil
+    end
+  end
 end

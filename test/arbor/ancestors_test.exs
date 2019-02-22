@@ -57,4 +57,18 @@ defmodule Arbor.AncestorsTest do
       assert ancestors == ["chauncy", "Downloads", "movies"]
     end
   end
+
+  describe "ancestors/1 in another schema" do
+    test "given a struct w/ a prefix returns its ancestors" do
+      [_, _, _, leaf2, _, _] = create_chatter("pupperinos")
+
+      ancestors =
+        leaf2.__meta__.prefix
+        |> put_in("private")
+        |> Comment.ancestors()
+        |> Repo.all()
+
+      assert ancestors == []
+    end
+  end
 end
