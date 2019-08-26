@@ -153,11 +153,11 @@ defmodule Arbor.Tree do
                 FROM #{opts[:table_name]}
                 WHERE #{opts[:foreign_key]} = ?
               UNION ALL
-                SELECT #{opts[:table_name]}.#{opts[:primary_key]},
+                SELECT #{opts[:primary_key]},
                        #{opts[:tree_name]}.depth + 1
                 FROM #{opts[:table_name]}
                   JOIN #{opts[:tree_name]}
-                  ON #{opts[:table_name]}.#{opts[:foreign_key]} = #{opts[:tree_name]}.#{
+                  ON #{opts[:foreign_key]} = #{opts[:tree_name]}.#{
                 opts[:primary_key]
               }
                 WHERE #{opts[:tree_name]}.depth + 1 < ?
