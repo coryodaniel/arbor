@@ -9,7 +9,6 @@ defmodule Arbor.DescendantsTest do
       dog_thread =
         root
         |> Comment.descendants()
-        |> Comment.by_inserted_at()
         |> Repo.all()
 
       assert dog_thread == tail
@@ -63,7 +62,6 @@ defmodule Arbor.DescendantsTest do
       folders =
         root
         |> Folder.descendants()
-        |> Folder.by_inserted_at()
         |> Repo.all()
         |> Enum.map(& &1.name)
 
@@ -84,7 +82,6 @@ defmodule Arbor.DescendantsTest do
       foreigns =
         root
         |> Foreign.descendants()
-        |> Foreign.by_inserted_at()
         |> Repo.all()
         |> Enum.map(& &1.name)
 

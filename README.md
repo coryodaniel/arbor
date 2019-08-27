@@ -90,7 +90,6 @@ Return the siblings of a record.
 ```elixir
 siblings = my_comment
            |> Comment.siblings
-           |> Comment.order_by_popularity
            |> Repo.all
 ```
 
@@ -101,7 +100,6 @@ Returns the entire ancestor (parent's parent's parent, etc) path to the record, 
 ```elixir
 ancestors = my_comment
               |> Comment.ancestors
-              |> Comment.order_by_inserted_at
               |> Repo.all
 ```
 
@@ -113,7 +111,6 @@ Returns the entire descendant tree of a record, but not including the record.
 ```elixir
 descendants = my_comment
               |> Comment.descendants
-              |> Comment.order_by_inserted_at
               |> Repo.all
 ```
 
@@ -123,7 +120,6 @@ from the root of the tree to retrieve the descendants from.
 ```elixir
 descendants = my_comment
               |> Comment.descendants(2)
-              |> Comment.order_by_inserted_at
               |> Repo.all
 ```
 

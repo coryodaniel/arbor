@@ -29,7 +29,6 @@ defmodule Arbor.ChildrenTest do
       folders =
         docs
         |> Folder.children()
-        |> Folder.by_inserted_at()
         |> Repo.all()
 
       assert length(folders) == 2
