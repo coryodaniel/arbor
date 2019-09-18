@@ -1,8 +1,42 @@
 language: elixir
-otp_release:
-  - 20.2
-elixir:
-  - 1.6.6
-  - 1.7.4
-before_script:
-  - export ARBOR_DB_USER=postgres
+
+matrix:
+  include:
+  - name: "elixir 1.6.6, erlang 20.3"
+    elixir: 1.6.6
+    otp_release: 20.3
+  - name: "elixir 1.6.6, erlang 21.3.8"
+    elixir: 1.6.6
+    otp_release: 21.3.8
+  - name: "elixir 1.7.4, erlang 20.3"
+    elixir: 1.7.4
+    otp_release: 20.3
+  - name: "elixir 1.7.4, erlang 21.3.8"
+    elixir: 1.7.4
+    otp_release: 21.3.8
+  - name: "elixir 1.7.4, erlang 22.0.7"
+    elixir: 1.7.4
+    otp_release: 22.0.7
+  - name: "elixir 1.8.2, erlang 20.3"
+    elixir: 1.8.2
+    otp_release: 20.3
+  - name: "elixir 1.8.2, erlang 21.3.8"
+    elixir: 1.8.2
+    otp_release: 21.3.8
+  - name: "elixir 1.8.2, erlang 22.0.7"
+    elixir: 1.8.2
+    otp_release: 22.0.7
+  - name: "elixir 1.9.1, erlang 20.3"
+    elixir: 1.9.1
+    otp_release: 20.3
+  - name: "elixir 1.9.1, erlang 21.3.8"
+    elixir: 1.9.1
+    otp_release: 21.3.8
+  - name: "elixir 1.9.1, erlang 22.0.7"
+    elixir: 1.9.1
+    otp_release: 22.0.7
+
+script:
+  - docker-compose up -d
+  - ARBOR_DB_USER=postgres mix test
+  - docker-compose down
