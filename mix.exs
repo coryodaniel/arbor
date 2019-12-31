@@ -33,6 +33,7 @@ defmodule Arbor.Mixfile do
       {:postgrex, ">= 0.0.0"},
 
       ## Test / Dev
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
       {:earmark, "~> 1.1", only: [:docs, :dev]},

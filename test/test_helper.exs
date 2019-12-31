@@ -1,3 +1,4 @@
+# credo:disable-for-this-file
 defmodule Arbor.TestCase do
   use ExUnit.CaseTemplate
 

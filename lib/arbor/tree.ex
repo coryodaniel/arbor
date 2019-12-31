@@ -80,13 +80,12 @@ defmodule Arbor.Tree do
       end
 
       def parent(struct) do
-        from(
-          t in unquote(definition),
-          where:
-            fragment(
-              unquote("#{opts[:primary_key]} = ?"),
-              type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type]))
-            )
+        o = unquote(opts)
+
+        Arbor.Adapters.Postgres.parent(struct,
+          foreign_key: o[:foreign_key],
+          parent_key: o[:parent_key],
+          foreign_key_type: o[:foreign_key_type]
         )
       end
 

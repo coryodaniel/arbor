@@ -1,3 +1,4 @@
+# credo:disable-for-this-file
 defmodule Arbor.Repo do
   @moduledoc false
   use Ecto.Repo,

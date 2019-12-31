@@ -73,4 +73,47 @@ defmodule Arbor.Adapters.PostgresTest do
       assert sorted_roots == [chauncys_home, rauls_home]
     end
   end
+
+  describe "parent/1" do
+    test "given a child struct with an integer primary key, returns it's parent" do
+      [_, branch1, leaf1, _, _, _] = create_conversation("dogs")
+
+      query = PGAdapter.parent(leaf1)
+      parent = Repo.one(query)
+
+      assert parent == branch1
+    end
+
+    test "given a child struct with a UUID primary key, returns it's parent" do
+      root = create_folder("chauncy")
+      docs = create_folder("Documents", parent: root)
+      downloads = create_folder("Downloads", parent: root)
+
+      create_folder("resumes", parent: docs)
+      create_folder("taxes", parent: docs)
+      create_folder("movies", parent: downloads)
+
+      query = PGAdapter.parent(downloads)
+      parent = Repo.one(query)
+
+      assert parent == root
+    end
+  end
+
+  describe "parent/2" do
+    test "given a child struct with an alternate parent foreign key name, returns a root node query" do
+      root = create_foreign("chauncy")
+      docs = create_foreign("Documents", parent: root)
+      downloads = create_foreign("Downloads", parent: root)
+
+      create_foreign("resumes", parent: docs)
+      create_foreign("taxes", parent: docs)
+      create_foreign("movies", parent: downloads)
+
+      query = PGAdapter.parent(downloads, foreign_key: :parent_uuid)
+      parent = Repo.one(query)
+
+      assert parent == root
+    end
+  end
 end
