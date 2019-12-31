@@ -19,7 +19,9 @@ defmodule Arbor.TestCase do
         folder |> Repo.insert!()
       end
 
-      def create_chatter(subject) do
+      def create_chatter(subject), do: create_conversation(subject)
+
+      def create_conversation(subject) do
         root = %Comment{body: "Lets talk about #{subject}"} |> Repo.insert!()
 
         branch1 =
