@@ -15,6 +15,13 @@ defmodule Arbor.Comment do
     timestamps()
   end
 
+  def by_id(query \\ __MODULE__) do
+    from(
+      c in query,
+      order_by: [asc: :id]
+    )
+  end
+
   def by_inserted_at(query \\ __MODULE__) do
     from(
       c in query,
