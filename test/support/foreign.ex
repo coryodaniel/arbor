@@ -1,3 +1,4 @@
+# credo:disable-for-this-file
 defmodule Arbor.Foreign do
   @moduledoc false
   use Ecto.Schema

@@ -2,7 +2,7 @@ defmodule Arbor.ParentTest do
   use Arbor.TestCase
 
   describe "parent/1 with an integer PK" do
-    test "given a struct w/ returns it's children" do
+    test "given a struct w/ returns it's parent" do
       [_, branch1, leaf1, _, _, _] = create_chatter("pupperinos")
 
       parent =
@@ -15,7 +15,7 @@ defmodule Arbor.ParentTest do
   end
 
   describe "parent/1 with a UUID PK" do
-    test "given a struct w/ returns it's children" do
+    test "given a struct w/ returns it's parent" do
       root = create_folder("chauncy")
       docs = create_folder("Documents", parent: root)
       downloads = create_folder("Downloads", parent: root)
@@ -34,7 +34,7 @@ defmodule Arbor.ParentTest do
   end
 
   describe "parent/1 with a UUID PK and other than id column name" do
-    test "given a struct w/ returns it's children" do
+    test "given a struct w/ returns it's parent" do
       root = create_foreign("chauncy")
       docs = create_foreign("Documents", parent: root)
       downloads = create_foreign("Downloads", parent: root)

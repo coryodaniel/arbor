@@ -31,6 +31,11 @@ defmodule Arbor.Mixfile do
     [
       {:ecto_sql, ">= 3.0.0"},
       {:postgrex, ">= 0.0.0"},
+
+      ## Test / Dev
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
+      {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
       {:earmark, "~> 1.1", only: [:docs, :dev]},
       {:ex_doc, "~> 0.19", only: [:docs, :dev]}
     ]
