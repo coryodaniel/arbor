@@ -138,7 +138,8 @@ defmodule Arbor.Tree do
             FROM #{opts[:tree_name]}
           )
           """), type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type]))),
-          on: t.unquote(opts[:primary_key]) == g.unquote(opts[:foreign_key])
+          on: t.unquote(opts[:primary_key]) == g.unquote(opts[:foreign_key]),
+          order_by: [desc: g.depth]
       end
 
       def descendants(struct, depth \\ 2_147_483_647) do
@@ -166,7 +167,8 @@ defmodule Arbor.Tree do
               """),
               type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type])),
               type(^depth, :integer)
-            )
+            ),
+          order_by: [asc: g.depth]
         )
       end
     end
