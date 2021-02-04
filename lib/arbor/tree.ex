@@ -85,13 +85,15 @@ defmodule Arbor.Tree do
         )
       end
 
+      defp id(struct), do: Map.get(struct, unquote(opts[:foreign_key]), Map.get(struct, :id))
+
       def parent(struct) do
         from(
           t in unquote(definition),
           where:
             fragment(
               unquote("#{opts[:primary_key]} = ?"),
-              type(^struct.unquote(opts[:foreign_key]), unquote(opts[:foreign_key_type]))
+              type(^id(struct), unquote(opts[:foreign_key_type]))
             )
         )
       end
@@ -102,7 +104,7 @@ defmodule Arbor.Tree do
           where:
             fragment(
               unquote("#{opts[:foreign_key]} = ?"),
-              type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type]))
+              type(^id(struct), unquote(opts[:foreign_key_type]))
             )
         )
       end
@@ -112,7 +114,7 @@ defmodule Arbor.Tree do
           t in unquote(definition),
           where:
             t.unquote(opts[:primary_key]) !=
-              type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type])),
+              type(^id(struct), unquote(opts[:primary_key_type])),
           where:
             fragment(
               unquote("#{opts[:foreign_key]} = ?"),
@@ -142,7 +144,7 @@ defmodule Arbor.Tree do
             SELECT *
             FROM #{opts[:tree_name]}
           )
-          """), type(^struct.unquote(opts[:primary_key]), unquote(opts[:primary_key_type]))),
+          """), type(^id(struct), unquote(opts[:primary_key_type]))),
           on: t.unquote(opts[:primary_key]) == g.unquote(opts[:foreign_key])
       end
 
@@ -169,7 +171,7 @@ defmodule Arbor.Tree do
               )
               SELECT #{opts[:primary_key]} FROM #{opts[:tree_name]}
               """),
-              type(^struct.unquote(opts[:primary_key]), unquote(opts[:foreign_key_type])),
+              type(^id(struct), unquote(opts[:foreign_key_type])),
               type(^depth, :integer)
             )
         )
