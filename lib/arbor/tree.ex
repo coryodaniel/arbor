@@ -35,7 +35,12 @@ defmodule Arbor.Tree do
   defmacro __before_compile__(%{module: definition} = _env) do
     arbor_opts = Module.get_attribute(definition, :arbor_opts)
 
-    {primary_key, primary_key_type, _} = Module.get_attribute(definition, :primary_key)
+
+    {primary_key, primary_key_type} = case Module.get_attribute(definition, :primary_key) do
+        {primary_key, primary_key_type, _} -> {primary_key, primary_key_type}
+        _ -> {arbor_opts[:primary_key], arbor_opts[:primary_key_type]}
+      end
+
     struct_fields = Module.get_attribute(definition, :struct_fields)
 
     struct_source = struct_fields[:__meta__].source
