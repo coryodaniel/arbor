@@ -1,3 +1,4 @@
+# credo:disable-for-this-file
 defmodule Arbor.Comment do
   @moduledoc false
   use Ecto.Schema
@@ -13,6 +14,13 @@ defmodule Arbor.Comment do
     belongs_to(:parent, Arbor.Comment)
 
     timestamps()
+  end
+
+  def by_id(query \\ __MODULE__) do
+    from(
+      c in query,
+      order_by: [asc: :id]
+    )
   end
 
   def by_inserted_at(query \\ __MODULE__) do
